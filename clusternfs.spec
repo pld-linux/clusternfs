@@ -9,6 +9,7 @@ URL:		http://clusternfs.sourceforge.net/
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}rc2.tar.bz2
 # Source0-md5:	b25b578b2dd3222b554c4953a32efc8f
 Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-types.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -54,12 +55,14 @@ mv -f aclocal.m4 acinclude.m4
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clusternfs
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clusternfs
+> $RPM_BUILD_ROOT%{_sysconfdir}/exports
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -87,4 +90,6 @@ fi
 %attr(755,root,root) %{_sbindir}/rpc.*
 %{_mandir}/man5/*
 %{_mandir}/man8/[mn]*
+%attr(664,root,fileshare) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/exports
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/clusternfs
 /var/lib/clusternfs

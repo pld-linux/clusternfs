@@ -1,0 +1,9 @@
+# Set nice level for rpc.mountd and rpc.nfsd
+SERVICE_RUN_NICE_LEVEL="+0"
+
+# Additional options for rpc.nfsd
+OPTIONS_NFSD="-T"
+
+# Additional options for rpc.mountd
+OPTIONS_MNTD="-T"
+
