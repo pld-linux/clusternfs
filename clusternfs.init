@@ -32,7 +32,7 @@ RETVAL=0
 #See how we were called.
 case "$1" in
   start)
-  	# Check if the service is already running?
+	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/clusternfs ]; then
 		msg_starting "ClusterNFS ($prog_mntd)"
 		daemon /usr/sbin/rpc.mountd $OPTIONS_MNTD
@@ -59,15 +59,15 @@ case "$1" in
 		msg_not_running ClusterNFS
 	fi
 	;;
-  status
+  status)
 	;;
   restart|force-reload)
-  	$0 stop
+	$0 stop
 	$0 start
 	exit $?
 	;;
   *)
-  	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
 	exit 3
 esac
 
