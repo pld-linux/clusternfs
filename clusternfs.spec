@@ -3,7 +3,7 @@ Summary(pl):	Serwer ClusterNFS
 Name:		clusternfs
 Version:	3.0
 Release:	0.rc2.1
-License:	GPL
+License:	GPL v2
 Group:		Networking/Daemons
 URL:		http://clusternfs.sourceforge.net
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}rc2.tar.bz2
