@@ -11,6 +11,7 @@ Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}rc2.tar.bz2
 Source1:	%{name}.init
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	libwrap-devel
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires:	portmap >= 4.0
