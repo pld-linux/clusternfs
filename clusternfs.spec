@@ -48,7 +48,7 @@ mv -f aclocal.m4 acinclude.m4
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{var/adm/fillup-templates,etc/rc.d/init.d}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -78,7 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc BUGS ChangeLog* EXAMPLE.ClusterNFS HALL_OF_FAME NEWS README* TODO*
 %attr(754,root,root) /etc/rc.d/init.d/clusternfs
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/rpc.*
 %{_mandir}/man5/*
-%{_mandir}/man8/*
+%{_mandir}/man8/[mn]*
 /var/lib/clusternfs
