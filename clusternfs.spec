@@ -64,17 +64,17 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add clusternfs
 if [ -r /var/lock/subsys/clusternfs ]; then
-        /etc/rc.d/init.d/clusternfs restart >&2
+	/etc/rc.d/init.d/clusternfs restart >&2
 else
-        echo "Run \"/etc/rc.d/init.d/clusternfs start\" to start nfs daemon."
+	echo "Run \"/etc/rc.d/init.d/clusternfs start\" to start nfs daemon."
 fi
 
 %preun
 if [ "$1" = "0" ]; then
-        if [ -r /var/lock/subsys/clusternfs ]; then
-                /etc/rc.d/init.d/clusternfs stop >&2
-        fi
-        /sbin/chkconfig --del clusternfs
+	if [ -r /var/lock/subsys/clusternfs ]; then
+		/etc/rc.d/init.d/clusternfs stop >&2
+	fi
+	/sbin/chkconfig --del clusternfs
 fi
 
 %files
