@@ -8,11 +8,13 @@ Group:		Networking/Daemons
 URL:		http://clusternfs.sourceforge.net
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}rc2.tar.bz2
 Source1:	%{name}.init
+BuildRequires:	autoconf
+BuildRequires:	automake
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 Requires:	portmap >= 4.0
 Provides:	nfscluster
 Conflicts:	nfs-utils nfs-server
-PreReq:		/sbin/chkconfig
-PreReq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -55,6 +57,9 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clusternfs
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %post
 /sbin/chkconfig --add clusternfs
 if [ -r /var/lock/subsys/clusternfs ]; then
@@ -70,9 +75,6 @@ if [ "$1" = "0" ]; then
         fi
         /sbin/chkconfig --del clusternfs
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
