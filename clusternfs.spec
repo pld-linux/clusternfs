@@ -5,7 +5,7 @@ Version:	3.0
 Release:	0.rc2.1
 License:	GPL v2
 Group:		Networking/Daemons
-URL:		http://clusternfs.sourceforge.net
+URL:		http://clusternfs.sourceforge.net/
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}rc2.tar.bz2
 # Source0-md5:	b25b578b2dd3222b554c4953a32efc8f
 Source1:	%{name}.init
