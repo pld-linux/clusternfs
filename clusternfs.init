@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # init file for ClusterNFS
 #
@@ -13,6 +13,13 @@
 # Get network config
 . /etc/sysconfig/network
 
+# defaults
+OPTIONS_NFSD="-T"
+OPTIONS_MNTD="-T"
+
+# Get service config
+[ -f /etc/sysconfig/clusternfs ] && . /etc/sysconfig/clusternfs
+
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
@@ -23,10 +30,14 @@ else
 	exit 0
 fi
 
-OPTIONS_NFSD="-T"
-OPTIONS_MNTD="-T"
-prog_nfsd="rpc.nfsd"
-prog_mntd="rpc.mountd"
+if [ -x /sbin/pidof ] && [ "$1" != "stop" ]; then
+	[ -z "`/sbin/pidof portmap`" ] && nls "Error: portmap isn't running" && exit 0
+fi
+
+# Sanity checks
+[ -x /usr/sbin/rpc.nfsd ] || exit 0
+[ -x /usr/sbin/rpc.mountd ] || exit 0
+[ -f /etc/exports ] || exit 0
 
 RETVAL=0
 #See how we were called.
@@ -34,11 +45,11 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/clusternfs ]; then
-		msg_starting "ClusterNFS ($prog_mntd)"
+		msg_starting "ClusterNFS mountd"
 		daemon /usr/sbin/rpc.mountd $OPTIONS_MNTD
 		RETVAL=$?
 		if [ $RETVAL -eq 0 ]; then
-			msg_starting "ClusterNFS ($prog_nfsd)"
+			msg_starting "ClusterNFS daemon"
 			daemon /usr/sbin/rpc.nfsd $OPTIONS_NFSD
 			RETVAL=$?
 		fi
@@ -49,10 +60,10 @@ case "$1" in
 	;;
   stop)
 	# Stop daemons.
-	if [ ! -f /var/lock/subsys/clusternfs ]; then
-		msg_stopping "ClusterNFS ($prog_nfsd)"
+	if [ -f /var/lock/subsys/clusternfs ]; then
+		msg_stopping "ClusterNFS daemon"
 		killproc /usr/sbin/rpc.nfsd
-		msg_stopping "ClusterNFS ($prog_mntd)"
+		msg_stopping "ClusterNFS mountd"
 		killproc /usr/sbin/rpc.mountd
 		rm -f /var/lock/subsys/clusternfs
 	else
@@ -60,6 +71,11 @@ case "$1" in
 	fi
 	;;
   status)
+  	status rpc.mountd
+	RETVAL=$?
+	status rpc.nfsd
+	RET=$?
+	[ $RETVAL -eq 0 ] && RETVAL=$RET
 	;;
   restart|force-reload)
 	$0 stop
