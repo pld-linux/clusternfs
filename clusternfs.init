@@ -1,0 +1,83 @@
+#!/bin/bash
+# init file for ClusterNFS
+#
+# chkconfig: 345 50 50
+# description: ClusterNFS server
+#
+# processname: /usr/sbin/rpc.mountd
+# processname: /usr/sbin/rpc.nfsd
+# config: /etc/exports
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+OPTIONS_NFSD="-T"
+OPTIONS_MNTD="-T"
+RETVAL=0
+prog_nfsd="rpc.nfsd"
+prog_mntd="rpc.mountd"
+
+start() {
+	msg_starting "ClusterNFS ($prog_mntd)"
+        daemon /usr/sbin/rpc.mountd $OPTIONS_MNTD
+	RETVAL=$?
+	msg_starting "ClusterNFS ($prog_nfsd)"
+        daemon /usr/sbin/rpc.nfsd $OPTIONS_NFSD
+	RETVAL=$?
+	touch /var/lock/subsys/clusternfs
+	return $RETVAL
+}
+
+stop() {
+	msg_stopping "ClusterNFS ($prog_nfsd)"
+	killproc /usr/sbin/rpc.nfsd
+	RETVAL=$?
+	msg_stopping "ClusterNFS ($prog_mntd)"	
+	killproc /usr/sbin/rpc.mountd
+	RETVAL=$?
+	rm -f /var/lock/subsys/clusternfs
+	return $RETVAL
+}
+
+reload(){
+	stop
+	start
+}
+
+restart(){
+	stop
+	start
+}
+
+condrestart(){
+    [ -e /var/lock/subsys/clusternfs ] && restart
+    return 0
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart)
+	restart
+        ;;
+  reload)
+	reload
+        ;;
+  condrestart)
+	condrestart
+	;;
+  status)
+        status rpc.nfsd
+        status rpc.mountd
+	RETVAL=$?
+        ;;
+  *)
+	gprintf "Usage: $0 {start|stop|status|restart|condrestart|reload}"
+	RETVAL=1
+esac
+
+exit $RETVAL
