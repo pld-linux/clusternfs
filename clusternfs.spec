@@ -9,6 +9,7 @@ URL:		http://clusternfs.sourceforge.net/
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}rc2.tar.bz2
 # Source0-md5:	b25b578b2dd3222b554c4953a32efc8f
 Source1:	%{name}.init
+Patch0:		%{name}-types.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libwrap-devel
@@ -31,6 +32,7 @@ plików wybieraj±c odpowiednio "oznakowane" nazwy plików postaci
 
 %prep
 %setup -q -n ClusterNFS
+%patch0 -p1
 
 %build
 mv -f aclocal.m4 acinclude.m4
