@@ -28,6 +28,7 @@ OPTIONS_MNTD="-T"
 prog_nfsd="rpc.nfsd"
 prog_mntd="rpc.mountd"
 
+RETVAL=0
 #See how we were called.
 case "$1" in
   start)
@@ -36,7 +37,7 @@ case "$1" in
 		msg_starting "ClusterNFS ($prog_mntd)"
 		daemon /usr/sbin/rpc.mountd $OPTIONS_MNTD
 		RETVAL=$?
-		if [ "$RETVAL" = "0" ]; then
+		if [ $RETVAL -eq 0 ]; then
 			msg_starting "ClusterNFS ($prog_nfsd)"
 			daemon /usr/sbin/rpc.nfsd $OPTIONS_NFSD
 			RETVAL=$?
@@ -44,7 +45,6 @@ case "$1" in
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clusternfs
 	else
 		msg_already_running ClusterNFS
-		exit 1
 	fi
 	;;
   stop)
@@ -57,18 +57,18 @@ case "$1" in
 		rm -f /var/lock/subsys/clusternfs
 	else
 		msg_not_running ClusterNFS
-		exit 1
 	fi
 	;;
   status
 	;;
-  restart|reload)
+  restart|force-reload)
   	$0 stop
 	$0 start
+	exit $?
 	;;
   *)
-  	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 1
+  	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
