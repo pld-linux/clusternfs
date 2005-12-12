@@ -6,7 +6,7 @@ Release:	0.rc2.1
 License:	GPL v2
 Group:		Networking/Daemons
 URL:		http://clusternfs.sourceforge.net/
-Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}rc2.tar.bz2
+Source0:	http://dl.sourceforge.net/clusternfs/%{name}-%{version}rc2.tar.bz2
 # Source0-md5:	b25b578b2dd3222b554c4953a32efc8f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -14,9 +14,9 @@ Patch0:		%{name}-types.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libwrap-devel
-PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires:	portmap >= 4.0
+Requires:	rc-scripts
 Provides:	nfscluster
 Conflicts:	nfs-utils nfs-server
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -90,6 +90,6 @@ fi
 %attr(755,root,root) %{_sbindir}/rpc.*
 %{_mandir}/man5/*
 %{_mandir}/man8/[mn]*
-%attr(664,root,fileshare) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/exports
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/clusternfs
+%attr(664,root,fileshare) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/exports
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clusternfs
 /var/lib/clusternfs
