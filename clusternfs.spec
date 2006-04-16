@@ -14,11 +14,13 @@ Patch0:		%{name}-types.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libwrap-devel
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	portmap >= 4.0
 Requires:	rc-scripts
 Provides:	nfscluster
-Conflicts:	nfs-utils nfs-server
+Conflicts:	nfs-server
+Conflicts:	nfs-utils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -43,7 +45,7 @@ mv -f aclocal.m4 acinclude.m4
 	--rquotad=no \
 	--ugidd=no --nis=yes \
 	--hosts-access=yes \
-	--libwrap-directory=/usr/lib \
+	--libwrap-directory=%{_prefix}/lib \
 	--exports-uid=0 --exports-gid=0 \
 	--log-mounts=yes --multi=yes \
 	--devtab=yes --trnames=yes \
@@ -69,17 +71,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add clusternfs
-if [ -r /var/lock/subsys/clusternfs ]; then
-	/etc/rc.d/init.d/clusternfs restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/clusternfs start\" to start nfs daemon."
-fi
+%service clusternfs restart "NFS daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -r /var/lock/subsys/clusternfs ]; then
-		/etc/rc.d/init.d/clusternfs stop >&2
-	fi
+	%service clusternfs stop
 	/sbin/chkconfig --del clusternfs
 fi
 
