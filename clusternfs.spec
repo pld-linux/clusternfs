@@ -1,5 +1,5 @@
 Summary:	ClusterNFS server
-Summary(pl):	Serwer ClusterNFS
+Summary(pl.UTF-8):   Serwer ClusterNFS
 Name:		clusternfs
 Version:	3.0
 Release:	0.rc2.1
@@ -28,10 +28,10 @@ ClusterNFS allows diskless clients to share a single root filesystem
 by matching "tagged" filenames of the form "filename$$TAG=value$$"
 with fallback to the original filename.
 
-%description -l pl
-ClusterNFS pozwala bezdyskowym klientom wspó³dzieliæ pojedynczy system
-plików wybieraj±c odpowiednio "oznakowane" nazwy plików postaci
-"plik$$TAG=warto¶æ$$" z podmian± do oryginalnej nazwy.
+%description -l pl.UTF-8
+ClusterNFS pozwala bezdyskowym klientom wspÃ³Å‚dzieliÄ‡ pojedynczy system
+plikÃ³w wybierajÄ…c odpowiednio "oznakowane" nazwy plikÃ³w postaci
+"plik$$TAG=wartoÅ›Ä‡$$" z podmianÄ… do oryginalnej nazwy.
 
 %prep
 %setup -q -n ClusterNFS
