@@ -2,7 +2,7 @@ Summary:	ClusterNFS server
 Summary(pl.UTF-8):	Serwer ClusterNFS
 Name:		clusternfs
 Version:	3.0
-Release:	0.rc2.1
+Release:	0.rc2.2
 License:	GPL v2
 Group:		Networking/Daemons
 URL:		http://clusternfs.sourceforge.net/
@@ -17,7 +17,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	portmap >= 4.0
-Requires:	rc-scripts
+Requires:	rc-scripts >= 0.4.1.5
 Provides:	nfscluster
 Conflicts:	nfs-server
 Conflicts:	nfs-utils
