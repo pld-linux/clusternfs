@@ -30,8 +30,8 @@ else
 	exit 0
 fi
 
-if [ -x /sbin/pidof ] && [ "$1" != "stop" ]; then
-	[ -z "`/sbin/pidof portmap`" ] && nls "Error: portmap isn't running" && exit 0
+if [ "$1" != "stop" ]; then
+	check_portmapper || { nls "Error: portmap isn't running" && exit 0; }
 fi
 
 # Sanity checks
